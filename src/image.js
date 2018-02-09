@@ -8,7 +8,7 @@ AvatarImage.prototype.createSVG = function() {
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
 
   if ('width' in this.options) {
-    var width = options.width
+    var width = this.options.width
     var height = 'height' in this.options ? this.options.height : width
 
     svg.setAttributes('width', width)
@@ -26,6 +26,7 @@ AvatarImage.prototype.createSVG = function() {
 
   svg.appendChild(rect)
 
+  // <text> name
   var text = document.createElement('text')
 
   text.setAttribute('fill', this.getTextColor())
@@ -33,7 +34,7 @@ AvatarImage.prototype.createSVG = function() {
   text.setAttribute('y', '50%')
   text.setAttribute('text-anchor', 'middle')
   text.setAttribute('alignment-baseline', 'central')
-  text.setAttribute('font-size', 12)
+  text.setAttribute('font-size', this.getFontSize())
   text.textContent = this.name
 
   svg.appendChild(text)
@@ -43,6 +44,20 @@ AvatarImage.prototype.createSVG = function() {
 
 AvatarImage.prototype.getTextColor = function() {
   return '#FFF'
+}
+
+AvatarImage.prototype.getFontSize = function() {
+  var textWidth = this.name.length * (this.name.charCodeAt(0) < 256 ? 0.75 : 1.5)
+  var availableWidth = this.options.width || 32
+
+  var fontSize = Math.round(availableWidth / textWidth)
+  if (fontSize < 8) {
+    this.name = this.name[0]
+  } else if (fontSize > 16) {
+    fontSize = 16
+  }
+
+  return fontSize
 }
 
 AvatarImage.prototype.getBackgroundColor = function() {
