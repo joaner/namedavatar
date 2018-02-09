@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "browserify src/index.js --standalone namedAvatar --outfile dist/namedavatar.js",
+    "build:vue": "browserify src/vue/index.js --standalone namedAvatarVue --outfile dist/namedavatar-vue.js",
     "minify": "uglifyjs --compress --mangle --source-map --output dist/namedavatar.min.js dist/namedavatar.js",
     "test": "mocha"
   },
