@@ -1,19 +1,52 @@
 <!doctype html>
 <html>
 <head>
+<meta charset="utf-8">
+<title>Requirejs examples</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
 <style type="text/css">
 .container {
   margin: 1rem auto;
   max-width: 640px;
-  text-align: center;
+}
+
+.example {
+  margin-bottom: 2rem;
+}
+.example h2 {
+  font-size: 1rem;
+}
+.example .preview {
+  display: flex;
+}
+.example .preview img {
+  margin-right: 1rem;
+}
+.example input[type="text"] {
+  width: 80px;
+  font-size: 1rem;
+  padding: 4px 8px;
 }
 </style>
 </head>
 <body>
   <div class="container">
-    <img data-name="李连杰" width="40" height="40"/>
-    <img data-name="Tom Hanks" width="40" height="40"/>
+    <div class="example">
+      <h2>setImgs(HTMLImageElement[] imgs)</h2>
+      <div class="preview">
+        <img data-name="李连杰" width="40" height="40"/>
+        <img data-name="Tom Hanks" width="40" height="40"/>
+        <img data-name="Elizabeth" width="40" height="40"/>
+      </div>
+    </div>
+    <hr/>
+    <div class="example">
+      <h2>setImg(HTMLImageElement img, string name)</h2>
+      <div class="preview">
+        <img id="avatar1" width="60" height="60" />
+        <input type="text" id="avatar1-name" value="李连杰"/>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -24,7 +57,20 @@
   })
 
   requirejs(['namedAvatar'], function(namedAvatar) {
-    namedAvatar.setImgs(document.querySelectorAll('img[data-name'))
+    // multi avatar
+    (function(imgs){
+      namedAvatar.setImgs(imgs)
+    })(document.querySelectorAll('img[data-name]'));
+
+    // special avatar
+    (function(img, input){
+      var renderAvatar = function() {
+        namedAvatar.setImg(img, input.value)
+      }
+
+      input.addEventListener('change', renderAvatar, false)
+      renderAvatar()
+    })(document.getElementById('avatar1'), document.getElementById('avatar1-name'));
   })
   </script>
 </body>
