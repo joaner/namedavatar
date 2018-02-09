@@ -1,5 +1,3 @@
-'use strict'
-
 function AvatarImage(name, options) {
   this.name = name
   this.options = options
@@ -7,6 +5,7 @@ function AvatarImage(name, options) {
 
 AvatarImage.prototype.createSVG = function() {
   var svg = document.createElement('svg')
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
 
   if ('width' in this.options) {
     var width = options.width
