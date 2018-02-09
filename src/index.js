@@ -1,19 +1,29 @@
 var AvatarImage = require('./image')
 var AvatarName = require('./name')
 
-NamedAvatar.prototype.setImgs = function(imgs) {
+function NamedAvatar() {
+}
+
+NamedAvatar.options = {}
+NamedAvatar.config = function(options) {
+  this.options = options || {}
+}
+
+NamedAvatar.setImgs = function(imgs) {
   for (var i = 0; i < imgs.length; i++) {
     this.setImg(imgs[i], imgs[i].getAttribute('data-name'))
   }
 }
-NamedAvatar.prototype.setImg = function(img, fullName) {
-  var avatarName = new AvatarName(fullName)
+
+NamedAvatar.setImg = function(img, fullName) {
+  var avatarName = new AvatarName(fullName, this.options)
   var name = avatarName.getName()
 
-  var avatarImage = new AvatarImage(name)
+  var avatarImage = new AvatarImage(name, this.options)
   var svg = avatarImage.createSVG()
 
-  var uri = 'data:image/svg+xml;utf8,' + svg.outerHTML
+  console.log(window.h = svg.outerHTML)
+  var uri = 'data:image/svg+xml,' + svg.outerHTML
   img.setAttribute('src', uri)
 }
 
