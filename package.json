@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/joaner/named-avatar/issues"
   },
-  "homepage": "https://github.com/joaner/named-avatar#readme"
+  "homepage": "https://github.com/joaner/named-avatar#readme",
+  "dependencies": {
+    "babel-preset-env": "^1.6.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0"
+  }
 }

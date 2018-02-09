@@ -1,4 +1,4 @@
-class Name {
+export default class Name {
   constructor(fullName, options) {
     this.fullName = fullName
     this.options = options
