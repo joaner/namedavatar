@@ -16,10 +16,15 @@ namedAvatar.setImgs = function(imgs) {
 }
 
 namedAvatar.setImg = function(img, fullName) {
+  var options = Object.create({}, this.options)
+  if (!('width' in options) && img.width) {
+    options.width = img.width
+  }
+
   var avatarName = new AvatarName(fullName, this.options)
   var name = avatarName.getName()
 
-  var avatarImage = new AvatarImage(name, this.options)
+  var avatarImage = new AvatarImage(name, options)
   var svg = avatarImage.createSVG()
 
   var uri = 'data:image/svg+xml,' + svg.outerHTML

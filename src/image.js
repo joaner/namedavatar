@@ -11,8 +11,8 @@ AvatarImage.prototype.createSVG = function() {
     var width = this.options.width
     var height = 'height' in this.options ? this.options.height : width
 
-    svg.setAttributes('width', width)
-    svg.setAttributes('height', height)
+    svg.setAttribute('width', width)
+    svg.setAttribute('height', height)
   }
 
   // <rect> background
