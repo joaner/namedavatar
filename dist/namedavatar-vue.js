@@ -27,18 +27,20 @@ AvatarImage.prototype.createSVG = function() {
 
   svg.appendChild(rect)
 
-  // <text> name
-  var text = document.createElement('text')
+  if (typeof this.name === 'string' && this.name.length > 0) {
+    // <text> name
+    var text = document.createElement('text')
 
-  text.setAttribute('fill', this.getTextColor())
-  text.setAttribute('x', '50%')
-  text.setAttribute('y', '50%')
-  text.setAttribute('text-anchor', 'middle')
-  text.setAttribute('alignment-baseline', 'central')
-  text.setAttribute('font-size', this.getFontSize())
-  text.textContent = this.name
+    text.setAttribute('fill', this.getTextColor())
+    text.setAttribute('x', '50%')
+    text.setAttribute('y', '50%')
+    text.setAttribute('text-anchor', 'middle')
+    text.setAttribute('alignment-baseline', 'central')
+    text.setAttribute('font-size', this.getFontSize())
+    text.textContent = this.name
 
-  svg.appendChild(text)
+    svg.appendChild(text)
+  }
 
   return svg
 }
@@ -114,7 +116,7 @@ namedAvatar.setImg = function(img, fullName) {
     options.width = img.width
   }
 
-  var avatarName = new AvatarName(fullName, this.options)
+  var avatarName = new AvatarName(fullName, options)
   var name = avatarName.getName()
 
   var avatarImage = new AvatarImage(name, options)
@@ -167,7 +169,7 @@ var namedAvatar = require('../index')
 module.exports = function (el, binding) {
   // if image is load ok
   if (el instanceof HTMLImageElement) {
-    if (el.naturalWidth) {
+    if (el.naturalWidth && el.src.indexOf('data:') !== 0) {
       return
     }
   }

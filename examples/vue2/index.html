@@ -4,12 +4,52 @@
   <title>Vue</title>
   <script src="https://unpkg.com/vue"></script>
   <script src="../../dist/namedavatar-vue.js"></script>
+  <style type="text/css">
+  .form {
+    margin: 20px auto;
+  }
+  .form-control {
+    padding-bottom: 10px;
+  }
+  .form-control label {
+    width: 80px;
+    text-align: right;
+    margin-right: 10px;
+    display: inline-block;
+  }
+  .form-control input[type="text"], .form-control input[type="number"] {
+    width: 120px;
+    box-sizing: border-box;
+    padding: 4px 8px;
+  }
+  </style>
 </head>
 <body>
   <div id="app">
-    <img v-avatar="'李连杰'" width="40" height="40"/>
-    <img v-avatar="'Tom Hanks'" width="40" height="40"/>
-    <img v-avatar="'Elizabeth'" width="40" height="40"/>
+    <div style="text-align: center;">
+      <img
+        v-avatar="fullName"
+        :width="width"
+        :height="width"
+        :style="round ? 'border-radius: 100%' : ''"
+      />
+      <form>
+        <div class="form-control">
+          <label>full name</label>
+          <input type="text" v-model="fullName" />
+        </div>
+        <div class="form-control">
+          <label>width</label>
+          <input type="number" v-model="width" />
+        </div>
+        <div class="form-control">
+          <label>round</label>
+          <div style="width: 120px; display: inline-block; text-align: left;">
+            <input type="checkbox" v-model="round" />
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -18,10 +58,9 @@
     var app = new Vue({
       el: '#app',
       data: {
-        greeting: 'Welcome to your Vue.js app!',
-        docsURL: 'http://vuejs.org/guide/',
-        discordURL: 'https://chat.vuejs.org',
-        forumURL: 'http://forum.vuejs.org/'
+        fullName: '李连杰',
+        width: 40,
+        round: false,
       },
       methods: {
         humanizeURL: function (url) {
