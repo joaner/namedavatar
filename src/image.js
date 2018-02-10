@@ -45,7 +45,7 @@ AvatarImage.prototype.createSVG = function() {
 }
 
 AvatarImage.prototype.getTextColor = function() {
-  return '#FFF'
+  return this.options.textColor
 }
 
 AvatarImage.prototype.getFontSize = function() {
@@ -53,10 +53,11 @@ AvatarImage.prototype.getFontSize = function() {
   var availableWidth = this.options.width || 32
 
   var fontSize = Math.round(availableWidth / textWidth)
-  if (fontSize < 8) {
-    this.name = this.name[0]
-  } else if (fontSize > 16) {
-    fontSize = 16
+  if (fontSize < this.options.minFontSize) {
+    this.name = this.name[0].toUpperCase()
+    fontSize = this.options.minFontSize
+  } else if (fontSize > this.options.maxFontSize) {
+    fontSize = this.options.maxFontSize
   }
 
   return fontSize
@@ -70,14 +71,7 @@ AvatarImage.prototype.getBackgroundColor = function() {
 
   // pick from https://material.io/guidelines/style/color.html#color-color-tool
   // Google Material Design Color 500
-  var bgColors = [
-    '#F44336', '#E91E63', '#9C27B0',
-    '#673AB7', '#3F51B5', '#2196F3',
-    '#03A9F4', '#00BCD4', '#009688',
-    '#4CAF50', '#8BC34A', '#CDDC39',
-    '#FFEB3B', '#FFC107', '#FF9800',
-    '#FF5722', '#795548', '#607D8B',
-  ]
+  var bgColors = this.options.backgroundColors
 
   var index
   if (this.name) {
