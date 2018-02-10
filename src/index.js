@@ -21,7 +21,7 @@ namedAvatar.setImg = function(img, fullName) {
     options.width = img.width
   }
 
-  var avatarName = new AvatarName(fullName, this.options)
+  var avatarName = new AvatarName(fullName, options)
   var name = avatarName.getName()
 
   var avatarImage = new AvatarImage(name, options)
