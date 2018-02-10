@@ -34,9 +34,9 @@
     <div class="example">
       <h2>setImgs(HTMLImageElement[] imgs)</h2>
       <div class="preview">
-        <img data-name="李连杰" width="40" height="40"/>
-        <img data-name="Tom Hanks" width="40" height="40"/>
-        <img data-name="Elizabeth" width="40" height="40"/>
+        <img alt="李连杰" width="40" height="40"/>
+        <img alt="Tom Hanks" width="40" height="40"/>
+        <img alt="Elizabeth" width="40" height="40"/>
       </div>
     </div>
     <hr/>
@@ -59,8 +59,8 @@
   requirejs(['namedAvatar'], function(namedAvatar) {
     // multi avatar
     (function(imgs){
-      namedAvatar.setImgs(imgs)
-    })(document.querySelectorAll('img[data-name]'));
+      namedAvatar.setImgs(imgs, 'alt')
+    })(document.querySelectorAll('img[alt]'));
 
     // special avatar
     (function(img, input){

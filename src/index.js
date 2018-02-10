@@ -5,7 +5,7 @@ function namedAvatar() {
 }
 
 namedAvatar.options = {
-  nameType: 'firstName', // firstName, initials
+  nameType: 'firstName', // lastName, initials
   fontFamily: 'Verdana, Geneva, sans-serif',
   backgroundColors: [
     '#F44336', '#E91E63', '#9C27B0',
@@ -24,9 +24,9 @@ namedAvatar.config = function(options) {
   this.options = options || {}
 }
 
-namedAvatar.setImgs = function(imgs) {
+namedAvatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
-    this.setImg(imgs[i], imgs[i].getAttribute('data-name'))
+    this.setImg(imgs[i], imgs[i].getAttribute(attr))
   }
 }
 
