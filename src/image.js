@@ -55,7 +55,7 @@ AvatarImage.prototype.getFontSize = function() {
   var fontSize = Math.round(availableWidth / textWidth)
   if (fontSize < this.options.minFontSize) {
     this.name = this.name[0].toUpperCase()
-    fontSize = this.options.minFontSize
+    fontSize = this.options.maxFontSize
   } else if (fontSize > this.options.maxFontSize) {
     fontSize = this.options.maxFontSize
   }
