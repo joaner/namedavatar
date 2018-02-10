@@ -1,9 +1,26 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.namedAvatar = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
+/**
+ * namedAvatar image
+ * @module AvatarImage
+ */
+
+/**
+ * Create Image from name
+ * @class
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ */
 function AvatarImage(name, options) {
   this.name = name
   this.options = options
 }
 
+/**
+ * Create SVG node
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ * @return {HTMLElement} - svg node
+ */
 AvatarImage.prototype.createSVG = function() {
   var svg = document.createElement('svg')
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
@@ -45,10 +62,18 @@ AvatarImage.prototype.createSVG = function() {
   return svg
 }
 
+/**
+ * get text color
+ * @return {string} - css color format
+ */
 AvatarImage.prototype.getTextColor = function() {
   return this.options.textColor
 }
 
+/**
+ * get text font size
+ * @return {number} - px number
+ */
 AvatarImage.prototype.getFontSize = function() {
   var textWidth = this.name.length * (this.name.charCodeAt(0) < 256 ? 0.75 : 1.5)
   var availableWidth = this.options.width || 32
@@ -56,7 +81,7 @@ AvatarImage.prototype.getFontSize = function() {
   var fontSize = Math.round(availableWidth / textWidth)
   if (fontSize < this.options.minFontSize) {
     this.name = this.name[0].toUpperCase()
-    fontSize = this.options.minFontSize
+    fontSize = this.options.maxFontSize
   } else if (fontSize > this.options.maxFontSize) {
     fontSize = this.options.maxFontSize
   }
@@ -64,14 +89,15 @@ AvatarImage.prototype.getFontSize = function() {
   return fontSize
 }
 
+/**
+ * get background color
+ * @return {string} - css background-color format
+ */
 AvatarImage.prototype.getBackgroundColor = function() {
   if ('backgroundColor' in this.options) {
     return this.options.backgroundColor
   }
 
-
-  // pick from https://material.io/guidelines/style/color.html#color-color-tool
-  // Google Material Design Color 500
   var bgColors = this.options.backgroundColors
 
   var index
@@ -87,15 +113,27 @@ AvatarImage.prototype.getBackgroundColor = function() {
 module.exports = AvatarImage
 
 },{}],2:[function(require,module,exports){
+/**
+ * namedAvatar API
+ * @module namedAvatar
+ */
+
 var AvatarImage = require('./image')
 var AvatarName = require('./name')
 
-function namedAvatar() {
-}
+function namedAvatar() {}
 
+/**
+ * global config
+ */
 namedAvatar.options = {
-  nameType: 'firstName', // lastName, initials
+  // pick type, eg. firstNmae, lastName, initials
+  nameType: 'firstName',
+
+  // font family list
   fontFamily: 'Verdana, Geneva, sans-serif',
+
+  // pick from https://material.io/guidelines/style/color.html#color-color-tool
   backgroundColors: [
     '#F44336', '#E91E63', '#9C27B0',
     '#673AB7', '#3F51B5', '#2196F3',
@@ -104,46 +142,91 @@ namedAvatar.options = {
     '#FFEB3B', '#FFC107', '#FF9800',
     '#FF5722', '#795548', '#607D8B',
   ],
+
+  // font color default white
   textColor: '#FFF',
+
+  // font size default between 8 and 16
   minFontSize: 8,
   maxFontSize: 16,
 }
 
+/**
+ * set global config
+ * @param {Object} options - extended global options
+ */
 namedAvatar.config = function(options) {
-  this.options = options || {}
+  Object.assign(this.options, options)
 }
 
+/**
+ * set named avatar of imgs
+ * @param {HTMLImageElement[]} imgs - <img> node list
+ * @param {string} attr - attribute name, eg. alt, data-name
+ */
 namedAvatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
     this.setImg(imgs[i], imgs[i].getAttribute(attr))
   }
 }
 
+/**
+ * set named avatar of img
+ * @param {HTMLImageElement} img - <img> node
+ * @param {string} fullName - full name
+ */
 namedAvatar.setImg = function(img, fullName) {
-  var options = Object.assign({}, this.options)
-  if (!('width' in options) && img.width) {
+  var options = {}
+  if (!('width' in this.options) && img.width) {
     options.width = img.width
   }
 
-  var avatarName = new AvatarName(fullName, options)
-  var name = avatarName.getName()
-
-  var avatarImage = new AvatarImage(name, options)
-  var svg = avatarImage.createSVG()
+  var svg = this.getSVG(fullName, options)
 
   var uri = 'data:image/svg+xml,' + svg.outerHTML
   img.setAttribute('src', uri)
 }
 
+/**
+ * get avatar svg node
+ * @param {string} fullName - full name
+ * @param {Object} extendOptions - local extended options
+ * @return {HTMLElement} - <svg> node
+ */
+namedAvatar.getSVG = function(fullName, extendOptions) {
+  var options = Object.assign({}, this.options, extendOptions)
+
+  var avatarName = new AvatarName(fullName, options)
+  var name = avatarName.getName()
+
+  var avatarImage = new AvatarImage(name, options)
+  return avatarImage.createSVG()
+}
+
 module.exports = namedAvatar
 
 },{"./image":1,"./name":3}],3:[function(require,module,exports){
-function Name(fullName, options) {
+/**
+ * namedAvatar name
+ * @module AvatarName
+*/
+
+/**
+ * pick name
+ * @class
+ * @param {string} fullName - full name
+ * @param {Object} options - options
+ */
+function AvatarName(fullName, options) {
   this.fullName = fullName
   this.options = options
 }
 
-Name.prototype.getName = function() {
+/**
+ * pick display name from full name
+ * @return {string} name - picked name
+ */
+AvatarName.prototype.getName = function() {
   var fullName = this.fullName
   if (!fullName) {
     return
@@ -186,7 +269,7 @@ Name.prototype.getName = function() {
   return name
 }
 
-module.exports = Name
+module.exports = AvatarName
 
 },{}]},{},[2])(2)
 });
