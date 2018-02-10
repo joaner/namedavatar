@@ -22,6 +22,11 @@
 .example .preview img {
   margin-right: 1rem;
 }
+.example pre {
+  border: 1px solid #E9E9E9;
+  padding: 5px 10px;
+  white-space: normal;
+}
 .example input[type="text"] {
   width: 80px;
   font-size: 1rem;
@@ -46,6 +51,7 @@
         <img id="avatar1" width="60" height="60" />
         <input type="text" id="avatar1-name" value="李连杰"/>
       </div>
+      <pre id="avatar1-code"></pre>
     </div>
   </div>
 
@@ -63,14 +69,21 @@
     })(document.querySelectorAll('img[alt]'));
 
     // special avatar
-    (function(img, input){
+    (function(img, input, source){
       var renderAvatar = function() {
         namedAvatar.setImg(img, input.value)
+
+        var code = namedAvatar.getSVG(input.value).outerHTML
+        source.textContent = code
       }
 
       input.addEventListener('change', renderAvatar, false)
       renderAvatar()
-    })(document.getElementById('avatar1'), document.getElementById('avatar1-name'));
+    })(
+      document.getElementById('avatar1'),
+      document.getElementById('avatar1-name'),
+      document.getElementById('avatar1-code')
+    );
   })
   </script>
 </body>
