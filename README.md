@@ -40,7 +40,7 @@ import { directive } from 'namedavatar'
 Vue.directive('avatar', directive);
 
 // vue template
-<img v-name="'Tom Hanks'" />
+<img v-avatar="'Tom Hanks'" />
 ```
 
 ## API
@@ -56,15 +56,20 @@ Vue.directive('avatar', directive);
 | minFontSize | number | `8` | min font size limit |
 | maxFontSize | number | `16` | max font size limit |
 
+### .getSVG(string name, Object options)
+
+- `name` the full name value
+- `options` extended options
+
 ### .setImgs(HTMLImageElement[] imgs, string attr)
 
 - `imgs` `<img>` list
-- `attr` pick name value from special attr, eg `'alt'`, `'data-name'`
+- `attr` pick full name value from special attr, eg `'alt'`, `'data-name'`
 
 ### .setImg(HTMLImageElement[] img, string name)
 
 - `img` `<img>` item
-- `name` the name value
+- `name` the full name value
 
 ## Contributing
 

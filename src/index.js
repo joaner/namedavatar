@@ -31,19 +31,25 @@ namedAvatar.setImgs = function(imgs, attr) {
 }
 
 namedAvatar.setImg = function(img, fullName) {
-  var options = Object.assign({}, this.options)
-  if (!('width' in options) && img.width) {
+  var options = {}
+  if (!('width' in this.options) && img.width) {
     options.width = img.width
   }
+
+  var svg = this.getSVG(fullName, options)
+
+  var uri = 'data:image/svg+xml,' + svg.outerHTML
+  img.setAttribute('src', uri)
+}
+
+namedAvatar.getSVG = function(fullName, extendOptions) {
+  var options = Object.assign({}, this.options, extendOptions)
 
   var avatarName = new AvatarName(fullName, options)
   var name = avatarName.getName()
 
   var avatarImage = new AvatarImage(name, options)
-  var svg = avatarImage.createSVG()
-
-  var uri = 'data:image/svg+xml,' + svg.outerHTML
-  img.setAttribute('src', uri)
+  return avatarImage.createSVG()
 }
 
 module.exports = namedAvatar
