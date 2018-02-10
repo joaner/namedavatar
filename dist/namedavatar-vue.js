@@ -46,7 +46,7 @@ AvatarImage.prototype.createSVG = function() {
 }
 
 AvatarImage.prototype.getTextColor = function() {
-  return '#FFF'
+  return this.options.textColor
 }
 
 AvatarImage.prototype.getFontSize = function() {
@@ -54,10 +54,11 @@ AvatarImage.prototype.getFontSize = function() {
   var availableWidth = this.options.width || 32
 
   var fontSize = Math.round(availableWidth / textWidth)
-  if (fontSize < 8) {
-    this.name = this.name[0]
-  } else if (fontSize > 16) {
-    fontSize = 16
+  if (fontSize < this.options.minFontSize) {
+    this.name = this.name[0].toUpperCase()
+    fontSize = this.options.minFontSize
+  } else if (fontSize > this.options.maxFontSize) {
+    fontSize = this.options.maxFontSize
   }
 
   return fontSize
@@ -71,14 +72,7 @@ AvatarImage.prototype.getBackgroundColor = function() {
 
   // pick from https://material.io/guidelines/style/color.html#color-color-tool
   // Google Material Design Color 500
-  var bgColors = [
-    '#F44336', '#E91E63', '#9C27B0',
-    '#673AB7', '#3F51B5', '#2196F3',
-    '#03A9F4', '#00BCD4', '#009688',
-    '#4CAF50', '#8BC34A', '#CDDC39',
-    '#FFEB3B', '#FFC107', '#FF9800',
-    '#FF5722', '#795548', '#607D8B',
-  ]
+  var bgColors = this.options.backgroundColors
 
   var index
   if (this.name) {
@@ -99,19 +93,34 @@ var AvatarName = require('./name')
 function namedAvatar() {
 }
 
-namedAvatar.options = {}
+namedAvatar.options = {
+  nameType: 'firstName', // lastName, initials
+  fontFamily: 'Verdana, Geneva, sans-serif',
+  backgroundColors: [
+    '#F44336', '#E91E63', '#9C27B0',
+    '#673AB7', '#3F51B5', '#2196F3',
+    '#03A9F4', '#00BCD4', '#009688',
+    '#4CAF50', '#8BC34A', '#CDDC39',
+    '#FFEB3B', '#FFC107', '#FF9800',
+    '#FF5722', '#795548', '#607D8B',
+  ],
+  textColor: '#FFF',
+  minFontSize: 8,
+  maxFontSize: 16,
+}
+
 namedAvatar.config = function(options) {
   this.options = options || {}
 }
 
-namedAvatar.setImgs = function(imgs) {
+namedAvatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
-    this.setImg(imgs[i], imgs[i].getAttribute('data-name'))
+    this.setImg(imgs[i], imgs[i].getAttribute(attr))
   }
 }
 
 namedAvatar.setImg = function(img, fullName) {
-  var options = Object.create({}, this.options)
+  var options = Object.assign({}, this.options)
   if (!('width' in options) && img.width) {
     options.width = img.width
   }
@@ -140,25 +149,41 @@ Name.prototype.getName = function() {
     return
   }
 
-  var firstCharCode = fullName.charCodeAt()
-  if (firstCharCode > 256) {
-    return fullName.slice(1)
-  }
-  var names = fullName.split(' ')
+  var name = fullName
 
-  // if only a name
-  if (names.length === 1) {
-    // if too much long
-    if (names[0].length > 6) {
-      // show first code
-      return names[0].charAt(0).toUpperCase()
+  var isASCII = fullName.charCodeAt(0) < 256
+  if (isASCII) {
+    var names = fullName.split(' ')
+    switch (this.options.nameType) {
+      case 'firstName':
+        name = names[names.length - 1]
+        break
+      case 'lastName':
+        name = names[0]
+        break
+      case 'initials':
+        name = ''
+        for (var i = 0; i < names.length; i++) {
+          name += names[i].charAt(0).toUpperCase()
+        }
+        break
     }
 
-    return names[0]
+    if (name.length > 6) {
+      name = name.charAt(0).toUpperCase()
+    }
+  } else {
+    switch (this.options.nameType) {
+      case 'lastName':
+      case 'initials':
+        name = fullName.slice(0, 1)
+        break
+      case 'firstName':
+        name = fullName.slice(1)
+    }
   }
 
-  var lastName = names[names.length - 1]
-  return lastName
+  return name
 }
 
 module.exports = Name
@@ -178,15 +203,19 @@ module.exports = function (el, binding) {
 }
 
 },{"../index":2}],5:[function(require,module,exports){
+var namedAvatar = require('../index')
 var directive = require('./directive')
 
 module.exports = {
   install: function (Vue, options) {
+    namedAvatar.config(options)
+    Vue.namedAvatar = namedAvatar
 
+    Vue.directive('directive', directive)
   },
 
   directive: directive,
 }
 
-},{"./directive":4}]},{},[5])(5)
+},{"../index":2,"./directive":4}]},{},[5])(5)
 });
