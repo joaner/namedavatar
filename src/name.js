@@ -9,25 +9,41 @@ Name.prototype.getName = function() {
     return
   }
 
-  var firstCharCode = fullName.charCodeAt()
-  if (firstCharCode > 256) {
-    return fullName.slice(1)
-  }
-  var names = fullName.split(' ')
+  var name = fullName
 
-  // if only a name
-  if (names.length === 1) {
-    // if too much long
-    if (names[0].length > 6) {
-      // show first code
-      return names[0].charAt(0).toUpperCase()
+  var isASCII = fullName.charCodeAt(0) < 256
+  if (isASCII) {
+    var names = fullName.split(' ')
+    switch (this.options.nameType) {
+      case 'firstName':
+        name = names[names.length - 1]
+        break
+      case 'lastName':
+        name = names[0]
+        break
+      case 'initials':
+        name = ''
+        for (var i = 0; i < names.length; i++) {
+          name += names[i].charAt(0).toUpperCase()
+        }
+        break
     }
 
-    return names[0]
+    if (name.length > 6) {
+      name = name.charAt(0).toUpperCase()
+    }
+  } else {
+    switch (this.options.nameType) {
+      case 'lastName':
+      case 'initials':
+        name = fullName.slice(0, 1)
+        break
+      case 'firstName':
+        name = fullName.slice(1)
+    }
   }
 
-  var lastName = names[names.length - 1]
-  return lastName
+  return name
 }
 
 module.exports = Name
