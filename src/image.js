@@ -1,8 +1,25 @@
+/**
+ * namedAvatar image
+ * @module AvatarImage
+ */
+
+/**
+ * Create Image from name
+ * @class
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ */
 function AvatarImage(name, options) {
   this.name = name
   this.options = options
 }
 
+/**
+ * Create SVG node
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ * @return {HTMLElement} - svg node
+ */
 AvatarImage.prototype.createSVG = function() {
   var svg = document.createElement('svg')
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
@@ -44,10 +61,18 @@ AvatarImage.prototype.createSVG = function() {
   return svg
 }
 
+/**
+ * get text color
+ * @return {string} - css color format
+ */
 AvatarImage.prototype.getTextColor = function() {
   return this.options.textColor
 }
 
+/**
+ * get text font size
+ * @return {number} - px number
+ */
 AvatarImage.prototype.getFontSize = function() {
   var textWidth = this.name.length * (this.name.charCodeAt(0) < 256 ? 0.75 : 1.5)
   var availableWidth = this.options.width || 32
@@ -63,14 +88,15 @@ AvatarImage.prototype.getFontSize = function() {
   return fontSize
 }
 
+/**
+ * get background color
+ * @return {string} - css background-color format
+ */
 AvatarImage.prototype.getBackgroundColor = function() {
   if ('backgroundColor' in this.options) {
     return this.options.backgroundColor
   }
 
-
-  // pick from https://material.io/guidelines/style/color.html#color-color-tool
-  // Google Material Design Color 500
   var bgColors = this.options.backgroundColors
 
   var index

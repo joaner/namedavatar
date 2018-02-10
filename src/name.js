@@ -1,9 +1,24 @@
-function Name(fullName, options) {
+/**
+ * namedAvatar name
+ * @module AvatarName
+*/
+
+/**
+ * pick name
+ * @class
+ * @param {string} fullName - full name
+ * @param {Object} options - options
+ */
+function AvatarName(fullName, options) {
   this.fullName = fullName
   this.options = options
 }
 
-Name.prototype.getName = function() {
+/**
+ * pick display name from full name
+ * @return {string} name - picked name
+ */
+AvatarName.prototype.getName = function() {
   var fullName = this.fullName
   if (!fullName) {
     return
@@ -46,4 +61,4 @@ Name.prototype.getName = function() {
   return name
 }
 
-module.exports = Name
+module.exports = AvatarName
