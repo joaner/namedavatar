@@ -54,6 +54,7 @@ AvatarImage.prototype.createSVG = function() {
     text.setAttribute('text-anchor', 'middle')
     text.setAttribute('alignment-baseline', 'central')
     text.setAttribute('font-size', this.getFontSize())
+    text.setAttribute('font-family', this.getFontFamily())
     text.textContent = this.name
 
     svg.appendChild(text)
@@ -87,6 +88,14 @@ AvatarImage.prototype.getFontSize = function() {
   }
 
   return fontSize
+}
+
+/**
+ * get text font family
+ * @return {string} - font family
+ */
+AvatarImage.prototype.getFontFamily = function() {
+  return this.options.fontFamily
 }
 
 /**
