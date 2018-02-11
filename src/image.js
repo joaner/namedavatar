@@ -1,5 +1,5 @@
 /**
- * namedAvatar image
+ * namedavatar image
  * @module AvatarImage
  */
 

@@ -1,4 +1,4 @@
-var namedAvatar = require('../index')
+var namedavatar = require('../index')
 
 module.exports = function (el, binding) {
   // if image is load ok
@@ -8,5 +8,5 @@ module.exports = function (el, binding) {
     }
   }
 
-  namedAvatar.setImg(el, binding.value)
+  namedavatar.setImg(el, binding.value)
 }

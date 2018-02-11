@@ -1,17 +1,17 @@
 /**
- * namedAvatar API
- * @module namedAvatar
+ * namedavatar API
+ * @module namedavatar
  */
 
 var AvatarImage = require('./image')
 var AvatarName = require('./name')
 
-function namedAvatar() {}
+function namedavatar() {}
 
 /**
  * global config
  */
-namedAvatar.options = {
+namedavatar.options = {
   // pick type, eg. firstNmae, lastName, initials
   nameType: 'firstName',
 
@@ -40,7 +40,7 @@ namedAvatar.options = {
  * set global config
  * @param {Object} options - extended global options
  */
-namedAvatar.config = function(options) {
+namedavatar.config = function(options) {
   Object.assign(this.options, options)
 }
 
@@ -49,7 +49,7 @@ namedAvatar.config = function(options) {
  * @param {HTMLImageElement[]} imgs - <img> node list
  * @param {string} attr - attribute name, eg. alt, data-name
  */
-namedAvatar.setImgs = function(imgs, attr) {
+namedavatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
     this.setImg(imgs[i], imgs[i].getAttribute(attr))
   }
@@ -60,7 +60,7 @@ namedAvatar.setImgs = function(imgs, attr) {
  * @param {HTMLImageElement} img - <img> node
  * @param {string} fullName - full name
  */
-namedAvatar.setImg = function(img, fullName) {
+namedavatar.setImg = function(img, fullName) {
   var options = {}
   if (!('width' in this.options) && img.width) {
     options.width = img.width
@@ -78,7 +78,7 @@ namedAvatar.setImg = function(img, fullName) {
  * @param {Object} extendOptions - local extended options
  * @return {HTMLElement} - <svg> node
  */
-namedAvatar.getSVG = function(fullName, extendOptions) {
+namedavatar.getSVG = function(fullName, extendOptions) {
   var options = Object.assign({}, this.options, extendOptions)
 
   var avatarName = new AvatarName(fullName, options)
@@ -88,4 +88,4 @@ namedAvatar.getSVG = function(fullName, extendOptions) {
   return avatarImage.createSVG()
 }
 
-module.exports = namedAvatar
+module.exports = namedavatar

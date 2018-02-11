@@ -1,6 +1,6 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.namedAvatar = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 /**
- * namedAvatar image
+ * namedavatar image
  * @module AvatarImage
  */
 
@@ -123,19 +123,19 @@ module.exports = AvatarImage
 
 },{}],2:[function(require,module,exports){
 /**
- * namedAvatar API
- * @module namedAvatar
+ * namedavatar API
+ * @module namedavatar
  */
 
 var AvatarImage = require('./image')
 var AvatarName = require('./name')
 
-function namedAvatar() {}
+function namedavatar() {}
 
 /**
  * global config
  */
-namedAvatar.options = {
+namedavatar.options = {
   // pick type, eg. firstNmae, lastName, initials
   nameType: 'firstName',
 
@@ -164,7 +164,7 @@ namedAvatar.options = {
  * set global config
  * @param {Object} options - extended global options
  */
-namedAvatar.config = function(options) {
+namedavatar.config = function(options) {
   Object.assign(this.options, options)
 }
 
@@ -173,7 +173,7 @@ namedAvatar.config = function(options) {
  * @param {HTMLImageElement[]} imgs - <img> node list
  * @param {string} attr - attribute name, eg. alt, data-name
  */
-namedAvatar.setImgs = function(imgs, attr) {
+namedavatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
     this.setImg(imgs[i], imgs[i].getAttribute(attr))
   }
@@ -184,7 +184,7 @@ namedAvatar.setImgs = function(imgs, attr) {
  * @param {HTMLImageElement} img - <img> node
  * @param {string} fullName - full name
  */
-namedAvatar.setImg = function(img, fullName) {
+namedavatar.setImg = function(img, fullName) {
   var options = {}
   if (!('width' in this.options) && img.width) {
     options.width = img.width
@@ -202,7 +202,7 @@ namedAvatar.setImg = function(img, fullName) {
  * @param {Object} extendOptions - local extended options
  * @return {HTMLElement} - <svg> node
  */
-namedAvatar.getSVG = function(fullName, extendOptions) {
+namedavatar.getSVG = function(fullName, extendOptions) {
   var options = Object.assign({}, this.options, extendOptions)
 
   var avatarName = new AvatarName(fullName, options)
@@ -212,11 +212,11 @@ namedAvatar.getSVG = function(fullName, extendOptions) {
   return avatarImage.createSVG()
 }
 
-module.exports = namedAvatar
+module.exports = namedavatar
 
 },{"./image":1,"./name":3}],3:[function(require,module,exports){
 /**
- * namedAvatar name
+ * namedavatar name
  * @module AvatarName
 */
 
