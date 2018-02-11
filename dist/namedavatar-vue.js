@@ -248,10 +248,10 @@ AvatarName.prototype.getName = function() {
     var names = fullName.split(' ')
     switch (this.options.nameType) {
       case 'firstName':
-        name = names[names.length - 1]
+        name = names[0]
         break
       case 'lastName':
-        name = names[0]
+        name = names[names.length - 1]
         break
       case 'initials':
         name = ''

@@ -58,22 +58,26 @@
   <script>
   requirejs.config({
     paths: {
-      namedAvatar: '../../dist/namedavatar'
+      namedavatar: '../../dist/namedavatar'
     }
   })
 
-  requirejs(['namedAvatar'], function(namedAvatar) {
+  requirejs(['namedavatar'], function(namedavatar) {
+    namedavatar.config({
+      nameType: 'firstName'
+    });
+
     // multi avatar
     (function(imgs){
-      namedAvatar.setImgs(imgs, 'alt')
+      namedavatar.setImgs(imgs, 'alt')
     })(document.querySelectorAll('img[alt]'));
 
     // special avatar
     (function(img, input, source){
       var renderAvatar = function() {
-        namedAvatar.setImg(img, input.value)
+        namedavatar.setImg(img, input.value)
 
-        var code = namedAvatar.getSVG(input.value).outerHTML
+        var code = namedavatar.getSVG(input.value).outerHTML
         source.textContent = code
       }
 
