@@ -14,6 +14,8 @@ npm install namedavatar --save
 
 namedavatar is a UMD module, support Browser, Requirejs, Vue2 directive.
 
+**NOTE** that the `<img>` `width` and `border-radius: 100%` requires you additional settings, the program is not set.
+
 ### Browser
 
 ```html
