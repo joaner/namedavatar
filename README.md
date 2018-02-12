@@ -14,23 +14,6 @@ npm install namedavatar --save
 
 namedavatar is a UMD module, support Browser, Requirejs, Vue2 directive.
 
-### Example
-```javascript
-var namedavatar = require('namedavatar')
-
-// export <svg> element
-namedavatar.getSVG('李连杰')
-
-// if img.src invalid, change to data:image/svg+xml,... avatar uri
-var img = document.querySelector('img#avatar1')
-namedavatar.setImg(img, 'Tom Hanks')
-```
-
-`img#avatar1` will be
-```html
-<img id="avatar1" width="32" height="32" src="data:image/svg+xml,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;32&quot; height=&quot;32&quot;&gt;&lt;rect fill=&quot;#9C27B0&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;&lt;/rect&gt;&lt;text fill=&quot;#FFF&quot; x=&quot;50%&quot; y=&quot;50%&quot; text-anchor=&quot;middle&quot; alignment-baseline=&quot;central&quot; font-size=&quot;16&quot; font-family=&quot;Verdana, Geneva, sans-serif&quot;&gt;Hanks&lt;/text&gt;&lt;/svg&gt;">
-```
-
 ### Browser
 
 ```html
@@ -42,11 +25,16 @@ namedavatar.config({
   nameType: 'initials'
 })
 
-// set single <img>
+// fill single <img>
 (function(img) {
   namedavatar.setImg(img, img.alt)
 })(document.getElementById('avatar1'))
 </script>
+```
+
+if `img.src` invalid, `img#avatar1` will be:
+```html
+<img id="avatar1" src="data:image/svg+xml,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;32&quot; height=&quot;32&quot;&gt;&lt;rect fill=&quot;#9C27B0&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;&lt;/rect&gt;&lt;text fill=&quot;#FFF&quot; x=&quot;50%&quot; y=&quot;50%&quot; text-anchor=&quot;middle&quot; alignment-baseline=&quot;central&quot; font-size=&quot;16&quot; font-family=&quot;Verdana, Geneva, sans-serif&quot;&gt;Hanks&lt;/text&gt;&lt;/svg&gt;">
 ```
 
 ### Requirejs
@@ -68,15 +56,15 @@ requirejs('namedavatar', function(namedavatar){
 
 ### Vue2
 
-mian.js
+main.js
 ```javascript
-import { directive } from 'namedavatar'
+import { directive } from 'namedavatar/vue'
 
 // register as directive
 Vue.directive('avatar', directive);
 ```
 
-vue template
+in vue template
 ```html
 <template>
   <img v-avatar="'Tom Hanks'" width="36"/>
