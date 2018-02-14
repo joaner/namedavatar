@@ -8,7 +8,7 @@
     "build:vue": "browserify src/vue/index.js --standalone namedavatarVue --outfile dist/namedavatar-vue.js",
     "dev": "watchify src/index.js --standalone namedavatar --outfile dist/namedavatar.js",
     "minify": "uglifyjs --compress --mangle --source-map --output dist/namedavatar.min.js dist/namedavatar.js",
-    "test": "mocha"
+    "test": "mocha test/test.js"
   },
   "repository": {
     "type": "git",
