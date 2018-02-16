@@ -6,7 +6,8 @@ module.exports = {
     namedavatar.config(options)
     Vue.namedavatar = namedavatar
 
-    Vue.directive('directive', directive)
+    // support v-avatar="username"
+    Vue.directive('avatar', directive)
   },
 
   directive: directive,
