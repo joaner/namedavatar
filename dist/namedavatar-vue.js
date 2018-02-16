@@ -48,13 +48,23 @@ AvatarImage.prototype.createSVG = function() {
     // <text> name
     var text = document.createElement('text')
 
+    var fontSize = this.getFontSize()
+
     text.setAttribute('fill', this.getTextColor())
     text.setAttribute('x', '50%')
     text.setAttribute('y', '50%')
     text.setAttribute('text-anchor', 'middle')
-    text.setAttribute('alignment-baseline', 'central')
-    text.setAttribute('font-size', this.getFontSize())
+    text.setAttribute('font-size', fontSize)
     text.setAttribute('font-family', this.getFontFamily())
+
+    // IE/Edge don't support alignment-baseline
+    // @see https://msdn.microsoft.com/en-us/library/gg558060(v=vs.85).aspx
+    if (document.documentMode || /Edge/.test(navigator.userAgent)) {
+      text.setAttribute('dy', Math.round(fontSize * 0.4))
+    } else {
+      text.setAttribute('alignment-baseline', 'middle')
+    }
+
     text.textContent = this.name
 
     svg.appendChild(text)
