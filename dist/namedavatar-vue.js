@@ -130,6 +130,23 @@ module.exports = AvatarImage
 var AvatarImage = require('./image')
 var AvatarName = require('./name')
 
+/**
+ * simple polyfill Object.assign for IE <= 11
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+ * @param {Object} target - target options
+ * @param {Object} options - new options
+ */
+function extendOptions(target, options) {
+  if (typeof Object.assign === 'function') {
+    Object.assign(target, options)
+  } else {
+    // for IE < 11
+    for (var key in options) {
+      target[key] = options[key]
+    }
+  }
+}
+
 function namedavatar() {}
 
 /**
@@ -166,14 +183,7 @@ namedavatar.options = {
  */
 namedavatar.config = function(options) {
   if (options && typeof options === 'object') {
-    if (typeof Object.assign === 'function') {
-      Object.assign(this.options, options)
-    } else {
-      // for IE < 11
-      for (var key in options) {
-        this.options[key] = options[key]
-      }
-    }
+    extendOptions(this.options, options)
   }
 }
 
@@ -201,18 +211,20 @@ namedavatar.setImg = function(img, fullName) {
 
   var svg = this.getSVG(fullName, options)
 
-  var uri = 'data:image/svg+xml,' + svg.outerHTML
+  var uri = 'data:image/svg+xml,' + encodeURIComponent(svg.outerHTML)
   img.setAttribute('src', uri)
 }
 
 /**
  * get avatar svg node
  * @param {string} fullName - full name
- * @param {Object} extendOptions - local extended options
+ * @param {Object} tempOptions - local extended options
  * @return {HTMLElement} - <svg> node
  */
-namedavatar.getSVG = function(fullName, extendOptions) {
-  var options = Object.assign({}, this.options, extendOptions)
+namedavatar.getSVG = function(fullName, tempOptions) {
+  var options = {}
+  extendOptions(options, this.options)
+  extendOptions(options, tempOptions)
 
   var avatarName = new AvatarName(fullName, options)
   var name = avatarName.getName()

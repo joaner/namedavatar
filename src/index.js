@@ -87,7 +87,7 @@ namedavatar.setImg = function(img, fullName) {
 
   var svg = this.getSVG(fullName, options)
 
-  var uri = 'data:image/svg+xml,' + svg.outerHTML
+  var uri = 'data:image/svg+xml,' + encodeURIComponent(svg.outerHTML)
   img.setAttribute('src', uri)
 }
 
