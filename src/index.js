@@ -41,7 +41,16 @@ namedavatar.options = {
  * @param {Object} options - extended global options
  */
 namedavatar.config = function(options) {
-  Object.assign(this.options, options)
+  if (options && typeof options === 'object') {
+    if (typeof Object.assign === 'function') {
+      Object.assign(this.options, options)
+    } else {
+      // for IE < 11
+      for (var key in options) {
+        this.options[key] = options[key]
+      }
+    }
+  }
 }
 
 /**

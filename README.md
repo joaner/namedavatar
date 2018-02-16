@@ -113,5 +113,5 @@ create svg by `attr` value, batch processing `setImg()`
 
 ## Contributing
 
-- IE > 8 (stack `<SVG>`, `Object.assign()`)
+- IE > 8 (based on [<SVG>](https://caniuse.com/#feat=svg))
 - Continuous improvement, welcome review and suggest

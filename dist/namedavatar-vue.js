@@ -165,7 +165,16 @@ namedavatar.options = {
  * @param {Object} options - extended global options
  */
 namedavatar.config = function(options) {
-  Object.assign(this.options, options)
+  if (options && typeof options === 'object') {
+    if (typeof Object.assign === 'function') {
+      Object.assign(this.options, options)
+    } else {
+      // for IE < 11
+      for (var key in options) {
+        this.options[key] = options[key]
+      }
+    }
+  }
 }
 
 /**
@@ -283,8 +292,14 @@ module.exports = AvatarName
 },{}],4:[function(require,module,exports){
 var namedavatar = require('../index')
 
+/**
+ * Vue directive bind
+ * @example
+ * var namedavatarVueDirective = require('namedavatar/vue/directive')
+ * Vue.directive('avatar', namedavatarVueDirective)'
+ */
 module.exports = function (el, binding) {
-  // if image is load ok
+  // if image is load success
   if (el instanceof HTMLImageElement) {
     if (el.naturalWidth && el.src.indexOf('data:') !== 0) {
       return
@@ -298,12 +313,19 @@ module.exports = function (el, binding) {
 var namedavatar = require('../index')
 var directive = require('./directive')
 
+/**
+ * Vue Plugin
+ * @example
+ * var namedavatarVue = require('namedavatar/vue')
+ * Vue.use(namedavatarVue)
+ */
 module.exports = {
   install: function (Vue, options) {
     namedavatar.config(options)
     Vue.namedavatar = namedavatar
 
-    Vue.directive('directive', directive)
+    // support v-avatar="username"
+    Vue.directive('avatar', directive)
   },
 
   directive: directive,
