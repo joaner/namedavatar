@@ -46,12 +46,18 @@ if `img.src` invalid, `img#avatar1` will be:
 ### Requirejs
 
 ```html
-<img data-name="李连杰">
+<img data-name="李连杰" style="border-radius: 100%">
 <img src="./invalid.jpg" data-name="Tom Hanks">
 
 <script>
+requirejs.config({
+  paths: {
+    namedavatar: '/dist/namedavatar'
+  }
+})
 requirejs('namedavatar', function(namedavatar){
   namedavatar.config({
+    // show the last name
     nameType: 'lastName',
   })
   // set multi <img> use data-name attribute for full name
@@ -113,5 +119,5 @@ create svg by `attr` value, batch processing `setImg()`
 
 ## Contributing
 
-- IE > 8 (based on [<SVG>](https://caniuse.com/#feat=svg))
+- IE > 8 (based on [svg](https://caniuse.com/#feat=svg))
 - Continuous improvement, welcome review and suggest
