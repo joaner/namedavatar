@@ -121,3 +121,28 @@ create svg by `attr` value, batch processing `setImg()`
 
 - IE > 8 (based on [svg](https://caniuse.com/#feat=svg))
 - Continuous improvement, welcome review and suggest
+
+### development
+
+```bash
+npm install -g watchify
+npm run dev
+```
+
+### build assert
+
+```bash
+npm install -g browserify uglifyjs
+
+# build UMD bundle and minify
+npm run build && npm run minify
+
+# build for vue
+npm run build:vue
+```
+
+### unit test:
+```bash
+npm install -g mocha
+npm run test
+```
