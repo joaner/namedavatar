@@ -218,8 +218,14 @@ namedavatar.setImg = function(img, fullName) {
   }
 
   var svg = this.getSVG(fullName, options)
+  var body = svg.outerHTML
+  var uri = 'data:image/svg+xml'
 
-  var uri = 'data:image/svg+xml,' + encodeURIComponent(svg.outerHTML)
+  if (typeof btoa === 'function') {
+    uri += ';base64,' + btoa(unescape(encodeURIComponent(body)))
+  } else {
+    uri += ',' + encodeURIComponent(body)
+  }
   img.setAttribute('src', uri)
 }
 
