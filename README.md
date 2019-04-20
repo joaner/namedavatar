@@ -16,11 +16,12 @@ npm install namedavatar --save
 
 ## Usage
 
-namedavatar is a UMD module, support Browser, Requirejs, Vue2 directive.
+namedavatar is a UMD module, support Browser, Requirejs, Vue2 directive, miniprogram（小程序）.
 
-**NOTE** that the `<img>` `width` and `border-radius: 100%` requires you additional settings, the program is not set.
+### Browser 
+[online example](https://joaner.github.io/namedavatar/examples/requirejs/index.html)
 
-### Browser
+> **NOTE** that the `<img>` `width` and `border-radius: 100%` requires you additional settings, the program is not set.
 
 ```html
 <img id="avatar1" src="./invalid.jpg" alt="Tom Hanks" width="40" style="border-radius: 100%">
@@ -58,7 +59,9 @@ if `img.src` invalid, `img#avatar1` will be:
 <img id="avatar1" src="data:image/svg+xml,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;32&quot; height=&quot;32&quot;&gt;&lt;rect fill=&quot;#9C27B0&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;&lt;/rect&gt;&lt;text fill=&quot;#FFF&quot; x=&quot;50%&quot; y=&quot;50%&quot; text-anchor=&quot;middle&quot; alignment-baseline=&quot;central&quot; font-size=&quot;16&quot; font-family=&quot;Verdana, Geneva, sans-serif&quot;&gt;Hanks&lt;/text&gt;&lt;/svg&gt;">
 ```
 
-### without DOM （support like miniprogram 小程序）
+### without DOM
+> support like miniprogram(小程序)
+
 ```javascript
 import namedavatar from 'namedavatar'
 
@@ -70,7 +73,7 @@ console.log(uri)
 ```
 
 ### Vue2
-
+[online example](https://joaner.github.io/namedavatar/examples/vue/index.html)
 main.js
 ```javascript
 import { directive } from 'namedavatar/vue'
