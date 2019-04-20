@@ -26,15 +26,30 @@ namedavatar is a UMD module, support Browser, Requirejs, Vue2 directive.
 <img id="avatar1" src="./invalid.jpg" alt="Tom Hanks" width="40" style="border-radius: 100%">
 
 <script src="/dist/namedavatar.min.js"></script>
+<!-- also support requirejs
+<script>
+requirejs.config({
+  paths: {
+    namedavatar: '/dist/namedavatar'
+  }
+})
+requirejs('namedavatar', function(namedavatar){
+  // ...
+})
+</script>
+-->
 <script>
 namedavatar.config({
   nameType: 'initials'
 })
 
 // fill single <img>
-(function(img) {
-  namedavatar.setImg(img, img.alt)
-})(document.getElementById('avatar1'))
+var img = document.getElementById('avatar1')
+namedavatar.setImg(img, img.alt)
+
+// fill multi <img>
+var imgs = document.querySelectorAll('img[data-name]')
+namedavatar.setImgs(imgs, 'data-name')
 </script>
 ```
 
@@ -43,27 +58,15 @@ if `img.src` invalid, `img#avatar1` will be:
 <img id="avatar1" src="data:image/svg+xml,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;32&quot; height=&quot;32&quot;&gt;&lt;rect fill=&quot;#9C27B0&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;&lt;/rect&gt;&lt;text fill=&quot;#FFF&quot; x=&quot;50%&quot; y=&quot;50%&quot; text-anchor=&quot;middle&quot; alignment-baseline=&quot;central&quot; font-size=&quot;16&quot; font-family=&quot;Verdana, Geneva, sans-serif&quot;&gt;Hanks&lt;/text&gt;&lt;/svg&gt;">
 ```
 
-### Requirejs
+### without DOM （support like miniprogram 小程序）
+```javascript
+import namedavatar from 'namedavatar'
 
-```html
-<img data-name="李连杰" style="border-radius: 100%">
-<img src="./invalid.jpg" data-name="Tom Hanks">
-
-<script>
-requirejs.config({
-  paths: {
-    namedavatar: '/dist/namedavatar'
-  }
-})
-requirejs('namedavatar', function(namedavatar){
-  namedavatar.config({
-    // show the last name
-    nameType: 'lastName',
-  })
-  // set multi <img> use data-name attribute for full name
-  namedavatar.setImgs(document.querySelectorAll('img[data-name]'), 'data-name')
-})
-</script>
+// create svg html string without DOM
+const svg = namedavatar.getSVGString('李连杰')
+const uri = namedavatar.getDataURI(svg)
+console.log(uri)
+// data:image/svg+xml,%3Csvg%20...
 ```
 
 ### Vue2
@@ -103,6 +106,15 @@ in vue template
 
 return `<svg>` node, get string by `svg.outerHTML`
 
+### .getSVGString(string name, Object options)
+
+> added at 1.1.0 version, special for without DOM like miniprogram(小程序)
+
+- `name` the full name value
+- `options` extended options
+
+return `<svg>` html string
+
 ### .setImg(HTMLImageElement img, string name)
 
 - `img` `<img>` item
@@ -116,6 +128,14 @@ create svg by `name`, and fill to `<img src="data:image/svg+xml,<svg>...">`
 - `attr` pick full name value from special attr, eg `'alt'`, `'data-name'`
 
 create svg by `attr` value, batch processing `setImg()`
+
+
+### .getDataURI(string html)
+
+- `html` `<svg>` node html string
+
+get data uri (rfc2397) of svg html
+
 
 ## Contributing
 
