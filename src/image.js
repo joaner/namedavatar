@@ -11,7 +11,7 @@
  */
 function AvatarImage(name, options) {
   this.name = name
-  this.options = options
+  this.options = options || {}
 }
 
 /**
@@ -68,6 +68,74 @@ AvatarImage.prototype.createSVG = function() {
   }
 
   return svg
+}
+
+/**
+ * Create SVG string without DOM (for miniprogram)
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ * @return {string} - svg string
+ */
+AvatarImage.prototype.createSVGString = function() {
+  const escapeHTML = function(text) {
+    return text.replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  const buildAttrs = function(attributes) {
+    let text = ''
+    for (const name in attributes) {
+      if (attributes.hasOwnProperty(name)) {
+        const value = typeof attributes[name] === 'string'
+          ? escapeHTML(attributes[name])
+          : ''
+        text += ` ${name}="${value}"`
+      }
+    }
+    return text
+  }
+
+  const svgAttributes = {
+    'xmlns': 'http://www.w3.org/2000/svg',
+  }
+  if ('width' in this.options) {
+    var width = this.options.width
+    var height = 'height' in this.options ? this.options.height : width
+
+    svgAttributes['width'] = width
+    svgAttributes['height'] = height
+  }
+
+  const rectAttributes = {
+    'fill': this.getBackgroundColor(),
+    'x': 0,
+    'y': 0,
+    'width': '100%',
+    'height': '100%',
+  }
+  const rect = `<rect${buildAttrs(rectAttributes)}></rect>`
+
+  let text
+  if (typeof this.name === 'string' && this.name.length > 0) {
+    const textAttributes = {
+      'fill': this.getTextColor(),
+      'x': '50%',
+      'y': '50%',
+      'text-anchor': 'middle',
+      'font-size': this.getFontSize(),
+      'font-family': this.getFontFamily(),
+
+      // NOTE: IE/Edge don't support alignment-baseline
+      // @see https://msdn.microsoft.com/en-us/library/gg558060(v=vs.85).aspx
+      'alignment-baseline': 'middle',
+    }
+
+    text = `<text${buildAttrs(textAttributes)}>${escapeHTML(this.name)}</text>`
+  }
+  return `<svg${buildAttrs(svgAttributes)}>${rect}${text}</svg>`
 }
 
 /**

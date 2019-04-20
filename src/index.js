@@ -56,6 +56,7 @@ namedavatar.options = {
 /**
  * set global config
  * @param {Object} options - extended global options
+ * @return void
  */
 namedavatar.config = function(options) {
   if (options && typeof options === 'object') {
@@ -67,6 +68,7 @@ namedavatar.config = function(options) {
  * set named avatar of imgs
  * @param {HTMLImageElement[]} imgs - <img> node list
  * @param {string} attr - attribute name, eg. alt, data-name
+ * @return void
  */
 namedavatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
@@ -78,6 +80,7 @@ namedavatar.setImgs = function(imgs, attr) {
  * set named avatar of img
  * @param {HTMLImageElement} img - <img> node
  * @param {string} fullName - full name
+ * @return void
  */
 namedavatar.setImg = function(img, fullName) {
   var options = {}
@@ -87,6 +90,15 @@ namedavatar.setImg = function(img, fullName) {
 
   var svg = this.getSVG(fullName, options)
   var body = svg.outerHTML
+
+  img.setAttribute('src', this.getDataURI(body))
+}
+
+/**
+ * get data uri of svg string
+ * @param {string} body - svg html string
+ */
+namedavatar.getDataURI = function(body) {
   var uri = 'data:image/svg+xml'
 
   if (typeof btoa === 'function') {
@@ -94,7 +106,24 @@ namedavatar.setImg = function(img, fullName) {
   } else {
     uri += ',' + encodeURIComponent(body)
   }
-  img.setAttribute('src', uri)
+  return uri
+}
+
+/**
+ * get avatar image instance object
+ * @param {string} fullName - full name
+ * @param {Object} tempOptions - local extended options
+ * @return {AvatarImage} - AvatarImage object
+ */
+namedavatar.getAvatarImage = function(fullName, tempOptions) {
+  var options = {}
+  extendOptions(options, this.options)
+  extendOptions(options, tempOptions)
+
+  var avatarName = new AvatarName(fullName, options)
+  var name = avatarName.getName()
+
+  return new AvatarImage(name, options)
 }
 
 /**
@@ -104,15 +133,19 @@ namedavatar.setImg = function(img, fullName) {
  * @return {HTMLElement} - <svg> node
  */
 namedavatar.getSVG = function(fullName, tempOptions) {
-  var options = {}
-  extendOptions(options, this.options)
-  extendOptions(options, tempOptions)
-
-  var avatarName = new AvatarName(fullName, options)
-  var name = avatarName.getName()
-
-  var avatarImage = new AvatarImage(name, options)
+  var avatarImage = this.getAvatarImage(fullName, tempOptions)
   return avatarImage.createSVG()
+}
+
+/**
+ * get avatar svg string without DOM
+ * @param {string} fullName - full name
+ * @param {Object} tempOptions - local extended options
+ * @return {string} - svg html string
+ */
+namedavatar.getSVGString = function(fullName, tempOptions) {
+  var avatarImage = this.getAvatarImage(fullName, tempOptions)
+  return avatarImage.createSVGString()
 }
 
 module.exports = namedavatar
