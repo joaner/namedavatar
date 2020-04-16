@@ -77,9 +77,15 @@ console.log(uri)
 main.js
 ```javascript
 import { directive } from 'namedavatar/vue'
-
-// register as directive
+// register v-avatar="Tom Hanks", show firstName (default)
 Vue.directive('avatar', directive);
+
+// or set options and same as above
+import namedavatarVue from 'namedavatar/vue'
+// register v-avatar="Tom Hanks", show lastName
+Vue.use(namedavatarVue, {
+    nameType: 'lastName'
+})
 ```
 
 in vue template

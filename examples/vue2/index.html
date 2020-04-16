@@ -55,7 +55,13 @@
   </div>
 
   <script>
+    // quickly install directive
     Vue.directive('avatar', namedavatarVue.directive)
+
+    // also can be install and setup options
+    // Vue.use(namedavatarVue, {
+    //   nameType: 'lastName'
+    // })
 
     var app = new Vue({
       el: '#app',
