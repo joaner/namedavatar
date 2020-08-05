@@ -51,7 +51,7 @@ AvatarImage.prototype.createSVG = function() {
     text.setAttribute('x', '50%')
     text.setAttribute('y', '50%')
     text.setAttribute('text-anchor', 'middle')
-    text.setAttribute('font-size', this.getFontSize())
+    text.setAttribute('font-size', this.getFontSize() + 'px')
     text.setAttribute('font-family', this.getFontFamily())
 
     // IE/Edge don't support alignment-baseline
@@ -125,7 +125,7 @@ AvatarImage.prototype.createSVGString = function() {
       'x': '50%',
       'y': '50%',
       'text-anchor': 'middle',
-      'font-size': this.getFontSize(),
+      'font-size': this.getFontSize() + 'px',
       'font-family': this.getFontFamily(),
 
       // NOTE: IE/Edge don't support alignment-baseline
