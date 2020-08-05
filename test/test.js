@@ -16,6 +16,10 @@ describe('#getName()', function() {
     var name = new AvatarName('李连杰', { nameType: 'initials' })
     assert.equal(name.getName(), '李');
   })
+  it('get initials from single-char chinese', function() {
+    var name = new AvatarName('李', { nameType: 'initials' })
+    assert.equal(name.getName(), '李');
+  })
 
   // english name support
   it('get last name from english', function() {
@@ -30,6 +34,10 @@ describe('#getName()', function() {
   it('get initials from english', function() {
     var name = new AvatarName('Tom Hanks', { nameType: 'initials' })
     assert.equal(name.getName(), 'TH');
+  })
+  it('get initials from single-char english', function() {
+    var name = new AvatarName('T', { nameType: 'initials' })
+    assert.equal(name.getName(), 'T');
   })
 })
 
