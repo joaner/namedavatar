@@ -12,7 +12,7 @@
  */
 function AvatarImage(name, options) {
   this.name = name
-  this.options = options
+  this.options = options || {}
 }
 
 /**
@@ -52,7 +52,7 @@ AvatarImage.prototype.createSVG = function() {
     text.setAttribute('x', '50%')
     text.setAttribute('y', '50%')
     text.setAttribute('text-anchor', 'middle')
-    text.setAttribute('font-size', this.getFontSize())
+    text.setAttribute('font-size', this.getFontSize() + 'px')
     text.setAttribute('font-family', this.getFontFamily())
 
     // IE/Edge don't support alignment-baseline
@@ -69,6 +69,74 @@ AvatarImage.prototype.createSVG = function() {
   }
 
   return svg
+}
+
+/**
+ * Create SVG string without DOM (for miniprogram)
+ * @param {string} name - picked name
+ * @param {Object} options - options
+ * @return {string} - svg string
+ */
+AvatarImage.prototype.createSVGString = function() {
+  const escapeHTML = function(text) {
+    return text.replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  const buildAttrs = function(attributes) {
+    let text = ''
+    for (const name in attributes) {
+      if (attributes.hasOwnProperty(name)) {
+        const value = typeof attributes[name] === 'string'
+          ? escapeHTML(attributes[name])
+          : ''
+        text += ` ${name}="${value}"`
+      }
+    }
+    return text
+  }
+
+  const svgAttributes = {
+    'xmlns': 'http://www.w3.org/2000/svg',
+  }
+  if ('width' in this.options) {
+    var width = this.options.width
+    var height = 'height' in this.options ? this.options.height : width
+
+    svgAttributes['width'] = width
+    svgAttributes['height'] = height
+  }
+
+  const rectAttributes = {
+    'fill': this.getBackgroundColor(),
+    'x': 0,
+    'y': 0,
+    'width': '100%',
+    'height': '100%',
+  }
+  const rect = `<rect${buildAttrs(rectAttributes)}></rect>`
+
+  let text
+  if (typeof this.name === 'string' && this.name.length > 0) {
+    const textAttributes = {
+      'fill': this.getTextColor(),
+      'x': '50%',
+      'y': '50%',
+      'text-anchor': 'middle',
+      'font-size': this.getFontSize() + 'px',
+      'font-family': this.getFontFamily(),
+
+      // NOTE: IE/Edge don't support alignment-baseline
+      // @see https://msdn.microsoft.com/en-us/library/gg558060(v=vs.85).aspx
+      'alignment-baseline': 'middle',
+    }
+
+    text = `<text${buildAttrs(textAttributes)}>${escapeHTML(this.name)}</text>`
+  }
+  return `<svg${buildAttrs(svgAttributes)}>${rect}${text}</svg>`
 }
 
 /**
@@ -188,6 +256,7 @@ namedavatar.options = {
 /**
  * set global config
  * @param {Object} options - extended global options
+ * @return void
  */
 namedavatar.config = function(options) {
   if (options && typeof options === 'object') {
@@ -199,6 +268,7 @@ namedavatar.config = function(options) {
  * set named avatar of imgs
  * @param {HTMLImageElement[]} imgs - <img> node list
  * @param {string} attr - attribute name, eg. alt, data-name
+ * @return void
  */
 namedavatar.setImgs = function(imgs, attr) {
   for (var i = 0; i < imgs.length; i++) {
@@ -210,6 +280,7 @@ namedavatar.setImgs = function(imgs, attr) {
  * set named avatar of img
  * @param {HTMLImageElement} img - <img> node
  * @param {string} fullName - full name
+ * @return void
  */
 namedavatar.setImg = function(img, fullName) {
   var options = {}
@@ -219,6 +290,15 @@ namedavatar.setImg = function(img, fullName) {
 
   var svg = this.getSVG(fullName, options)
   var body = svg.outerHTML
+
+  img.setAttribute('src', this.getDataURI(body))
+}
+
+/**
+ * get data uri of svg string
+ * @param {string} body - svg html string
+ */
+namedavatar.getDataURI = function(body) {
   var uri = 'data:image/svg+xml'
 
   if (typeof btoa === 'function') {
@@ -226,7 +306,24 @@ namedavatar.setImg = function(img, fullName) {
   } else {
     uri += ',' + encodeURIComponent(body)
   }
-  img.setAttribute('src', uri)
+  return uri
+}
+
+/**
+ * get avatar image instance object
+ * @param {string} fullName - full name
+ * @param {Object} tempOptions - local extended options
+ * @return {AvatarImage} - AvatarImage object
+ */
+namedavatar.getAvatarImage = function(fullName, tempOptions) {
+  var options = {}
+  extendOptions(options, this.options)
+  extendOptions(options, tempOptions)
+
+  var avatarName = new AvatarName(fullName, options)
+  var name = avatarName.getName()
+
+  return new AvatarImage(name, options)
 }
 
 /**
@@ -236,15 +333,19 @@ namedavatar.setImg = function(img, fullName) {
  * @return {HTMLElement} - <svg> node
  */
 namedavatar.getSVG = function(fullName, tempOptions) {
-  var options = {}
-  extendOptions(options, this.options)
-  extendOptions(options, tempOptions)
-
-  var avatarName = new AvatarName(fullName, options)
-  var name = avatarName.getName()
-
-  var avatarImage = new AvatarImage(name, options)
+  var avatarImage = this.getAvatarImage(fullName, tempOptions)
   return avatarImage.createSVG()
+}
+
+/**
+ * get avatar svg string without DOM
+ * @param {string} fullName - full name
+ * @param {Object} tempOptions - local extended options
+ * @return {string} - svg html string
+ */
+namedavatar.getSVGString = function(fullName, tempOptions) {
+  var avatarImage = this.getAvatarImage(fullName, tempOptions)
+  return avatarImage.createSVGString()
 }
 
 module.exports = namedavatar
@@ -299,6 +400,8 @@ AvatarName.prototype.getName = function() {
     if (name.length > 6) {
       name = name.charAt(0).toUpperCase()
     }
+  } else if (fullName.length < 2) {
+    name = fullName
   } else {
     switch (this.options.nameType) {
       case 'lastName':
@@ -306,7 +409,9 @@ AvatarName.prototype.getName = function() {
         name = fullName.slice(0, 1)
         break
       case 'firstName':
+      default:
         name = fullName.slice(1)
+        break
     }
   }
 
