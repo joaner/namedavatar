@@ -162,7 +162,7 @@ AvatarImage.prototype.getFontSize = function() {
     fontSize = this.options.maxFontSize
   }
 
-  return fontSize
+  return fontSize+"px";
 }
 
 /**
