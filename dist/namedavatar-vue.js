@@ -52,7 +52,7 @@ AvatarImage.prototype.createSVG = function() {
     text.setAttribute('x', '50%')
     text.setAttribute('y', '50%')
     text.setAttribute('text-anchor', 'middle')
-    text.setAttribute('font-size', this.getFontSize() + 'pxs')
+    text.setAttribute('font-size', this.getFontSize() + 'px')
     text.setAttribute('font-family', this.getFontFamily())
 
     // IE/Edge don't support alignment-baseline
