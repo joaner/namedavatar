@@ -54,7 +54,7 @@ AvatarName.prototype.getName = function() {
         name = fullName.slice(0, 1)
         break
       case 'firstName':
-        name = fullName.slice(1)
+        name = fullName.length>1?fullName.slice(1):fullName;// fullName为一个字的时候，slice(1)为空导致svg生成失败
     }
   }
 
